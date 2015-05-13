@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  variance: 1.5
+  probability: 1.5
+  time: 2015-05-12 22:07:23
+
+two:
+  variance: 1.5
+  probability: 1.5
+  time: 2015-05-12 22:07:23

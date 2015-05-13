@@ -25,28 +25,23 @@ ActiveRecord::Schema.define(version: 20150512120723) do
     t.float    "temperature"
     t.float    "rain"
     t.integer  "Day_id"
-    t.integer  "WindObservation_id"
-    t.integer  "RainfallObservation_id"
-    t.integer  "TemperatureObservation_id"
-    t.datetime "created_at",                null: false
-    t.datetime "updated_at",                null: false
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
   end
 
   create_table "predictions", force: :cascade do |t|
     t.float    "variance"
     t.float    "probability"
     t.time     "time"
-    t.integer  "WindObservation_id"
-    t.integer  "RainfallObservation_id"
-    t.integer  "TemperatureObservation_id"
     t.integer  "Day_id"
-    t.datetime "created_at",                null: false
-    t.datetime "updated_at",                null: false
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
   end
 
   create_table "rainfall_observations", force: :cascade do |t|
     t.float    "rainfall_amount"
     t.integer  "Observation_id"
+    t.integer  "Prediction_id"
     t.datetime "created_at",      null: false
     t.datetime "updated_at",      null: false
   end
@@ -54,6 +49,7 @@ ActiveRecord::Schema.define(version: 20150512120723) do
   create_table "temperature_observations", force: :cascade do |t|
     t.float    "current_temperature"
     t.integer  "Observation_id"
+    t.integer  "Prediction_id"
     t.datetime "created_at",          null: false
     t.datetime "updated_at",          null: false
   end
@@ -71,6 +67,7 @@ ActiveRecord::Schema.define(version: 20150512120723) do
     t.float    "wind_speed"
     t.float    "wind_direction"
     t.integer  "Observation_id"
+    t.integer  "Prediction_id"
     t.datetime "created_at",     null: false
     t.datetime "updated_at",     null: false
   end

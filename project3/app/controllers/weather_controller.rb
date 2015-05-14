@@ -1,4 +1,5 @@
 require 'cgi'
+require 'date'
 class WeatherController < ApplicationController
 
 	def data
@@ -17,6 +18,23 @@ class WeatherController < ApplicationController
 
 
 	end
+	def to_json
+		ActiveRecord::JSON.decode(super).merge({ :date => DateTime.now.to_date}).to_json
+	end
+
+	def locations
+		#this is just getting the all 
+
+		@stations = WeatherStation.all
+
+		respond_to do |format|
+			format.html
+			format.json { render json: @stations.to_json }
+		end
+
+	end
+	
+
 
 	def location_retrivel()
 

@@ -4,8 +4,9 @@ class CreateObservations < ActiveRecord::Migration
       t.string :description
       t.float :temperature
       t.float :rain
+      t.string :source
       t.references :Day
-     
+      
     
        t.timestamps null: false
     end

@@ -4,9 +4,8 @@ class WeatherController < ApplicationController
 
 	def data
 		@post_code = params[:post_code]
-		if(@post_code[/[0-9]/] == nil)
-			@message = "please DONT give me a shit post code"
-		end
+		@date = params[:date]
+		
 	end
 
 
@@ -18,22 +17,39 @@ class WeatherController < ApplicationController
 
 
 	end
-	def to_json
-		ActiveRecord::JSON.decode(super).merge({ :date => DateTime.now.to_date}).to_json
+	def as_json(options = {})
+		options.keys.each { |key| super(key => options[key])}
 	end
 
 	def locations
-		#this is just getting the all 
+		
 
 		@stations = WeatherStation.all
+		date = DateTime.now.to_date
+		my_json = {:date => date , :locations => return_formatted_output_for_stations}
 
+		json_ = JSON.pretty_generate(my_json);
+       
 		respond_to do |format|
 			format.html
-			format.json { render json: @stations.to_json }
+			format.json { render json: json_ }  #@stations.to_json }
 		end
 
 	end
 	
+	def return_formatted_output_for_stations
+		stations = WeatherStation.all.to_a
+
+		#looop on the stations
+		required_json_objects = []
+
+		stations.each { |station|
+			jo = station.to_json.to_s
+			finalObject = jo.gsub!(/\"/, '\'')
+			required_json_objects.push(finalObject)
+		 }
+		return required_json_objects
+	end
 
 
 	def location_retrivel()

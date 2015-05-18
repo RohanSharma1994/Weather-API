@@ -24,6 +24,7 @@ ActiveRecord::Schema.define(version: 20150512120723) do
     t.string   "description"
     t.float    "temperature"
     t.float    "rain"
+    t.string   "source"
     t.integer  "Day_id"
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
@@ -58,7 +59,7 @@ ActiveRecord::Schema.define(version: 20150512120723) do
     t.float    "lat"
     t.float    "lon"
     t.string   "post_code"
-    t.string   "name"
+    t.string   "name",       null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

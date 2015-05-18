@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class PredictionTest < ActiveSupport::TestCase
+class RainfallTest < ActiveSupport::TestCase
   # test "the truth" do
   #   assert true
   # end

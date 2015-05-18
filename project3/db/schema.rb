@@ -11,66 +11,62 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150512120723) do
+ActiveRecord::Schema.define(version: 20150518115120) do
 
   create_table "days", force: :cascade do |t|
     t.date     "date"
-    t.integer  "weather_station_id"
     t.datetime "created_at",         null: false
     t.datetime "updated_at",         null: false
+    t.integer  "weather_station_id"
   end
+
+  add_index "days", ["weather_station_id"], name: "index_days_on_weather_station_id"
 
   create_table "observations", force: :cascade do |t|
     t.string   "description"
-    t.float    "temperature"
-    t.float    "rain"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+    t.integer  "day_id"
     t.string   "source"
-    t.integer  "Day_id"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
   end
 
-  create_table "predictions", force: :cascade do |t|
-    t.float    "variance"
-    t.float    "probability"
-    t.time     "time"
-    t.integer  "Day_id"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
-  end
+  add_index "observations", ["day_id"], name: "index_observations_on_day_id"
 
-  create_table "rainfall_observations", force: :cascade do |t|
+  create_table "rainfalls", force: :cascade do |t|
     t.float    "rainfall_amount"
-    t.integer  "Observation_id"
-    t.integer  "Prediction_id"
     t.datetime "created_at",      null: false
     t.datetime "updated_at",      null: false
+    t.integer  "observation_id"
   end
 
-  create_table "temperature_observations", force: :cascade do |t|
+  add_index "rainfalls", ["observation_id"], name: "index_rainfalls_on_observation_id"
+
+  create_table "temperatures", force: :cascade do |t|
     t.float    "current_temperature"
-    t.integer  "Observation_id"
-    t.integer  "Prediction_id"
     t.datetime "created_at",          null: false
     t.datetime "updated_at",          null: false
+    t.integer  "observation_id"
   end
 
+  add_index "temperatures", ["observation_id"], name: "index_temperatures_on_observation_id"
+
   create_table "weather_stations", force: :cascade do |t|
+    t.string   "name"
     t.float    "lat"
     t.float    "lon"
     t.string   "post_code"
-    t.string   "name",       null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "wind_observations", force: :cascade do |t|
+  create_table "winds", force: :cascade do |t|
     t.float    "wind_speed"
-    t.float    "wind_direction"
-    t.integer  "Observation_id"
-    t.integer  "Prediction_id"
+    t.string   "wind_direction"
     t.datetime "created_at",     null: false
     t.datetime "updated_at",     null: false
+    t.integer  "observation_id"
   end
+
+  add_index "winds", ["observation_id"], name: "index_winds_on_observation_id"
 
 end

@@ -2,8 +2,8 @@
 
 one:
   wind_speed: 1.5
-  wind_direction: 1.5
+  wind_direction: MyString
 
 two:
   wind_speed: 1.5
-  wind_direction: 1.5
+  wind_direction: MyString

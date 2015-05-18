@@ -2,10 +2,6 @@
 
 one:
   description: MyString
-  temperature: 1.5
-  rain: 1.5
 
 two:
   description: MyString
-  temperature: 1.5
-  rain: 1.5

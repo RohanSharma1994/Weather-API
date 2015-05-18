@@ -15,9 +15,9 @@ ActiveRecord::Schema.define(version: 20150512120723) do
 
   create_table "days", force: :cascade do |t|
     t.date     "date"
-    t.integer  "WeatherStation_id"
-    t.datetime "created_at",        null: false
-    t.datetime "updated_at",        null: false
+    t.integer  "weather_station_id"
+    t.datetime "created_at",         null: false
+    t.datetime "updated_at",         null: false
   end
 
   create_table "observations", force: :cascade do |t|

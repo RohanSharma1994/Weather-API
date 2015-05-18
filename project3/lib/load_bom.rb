@@ -1,6 +1,7 @@
 require 'nokogiri'
 require 'open-uri'
 require 'json'
+require 'date'
 
 url = 'http://www.bom.gov.au/vic/observations/melbourne.shtml'
 	doc = Nokogiri::HTML(open(url))
@@ -11,14 +12,6 @@ url = 'http://www.bom.gov.au/vic/observations/melbourne.shtml'
 	rainfall =  doc.css('[headers~=obs-rainsince9am]')
 	dew_point =  doc.css('[headers~=obs-dewpoint]')
 
-	if(Observation.all.where(:source => "BOM").to_a.count != 0)
-	  	Observation.all.where(:source => "BOM").to_a.each do  |bom_record|
-	    bom_record.temperature_observations.delete_all
-	    bom_record.wind_observations.delete_all
-	    bom_record.rainfall_observations.delete_all
-	    Observation.find(bom_record.id).delete
-  end
-end
 	@station = WeatherStation.all.to_a
 	count  = 0
 
@@ -40,16 +33,17 @@ end
 			rain  = (rainfall[count].text.to_f).round(4)
 		end
 		day_created = station.days.create(:date => date)
-		day_created.weather_station_id = station.id
 		dp = dew_point[count].text.to_f
 		t = temp[count].text.to_f
-		d = Day.observations.create(source: "BOM", day_id: day_created.id, description: "not sure")
-		d.wind_observations.create(wind_speed: speed, wind_direction: direction)
-		d.rainfall_observations.create(:rainfall_amount => rain)
-		d.temperature_observations.create(:current_temperature => t)
+		o = day_created.observations.create(source: "BOM", description: "not sure")
 		count += 1
 	end 
 #day has station id 
 #observation has day id
 
 #we create a day 
+=begin
+
+
+o.wind_observations.create(wind_speed: speed, wind_direction: direction)
+=end

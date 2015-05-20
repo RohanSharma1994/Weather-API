@@ -1,0 +1,38 @@
+<h3> WeatherStations</h3>
+<br>
+<ul style = "display: inline-block; list-style-type: none" >
+<b>Name</b>
+<% @stations.each do |station| %>
+	
+
+	<li><%= station.name %></li>
+
+
+<%end%>
+
+</ul>
+
+<ul style = "display: inline-block; list-style-type: none" >
+<b>Lat</b>
+<% @stations.each do |station| %>
+	
+
+	<li><%= station.lat %></li>
+
+
+<%end%>
+
+</ul>
+<ul style = "display: inline-block; list-style-type: none" >
+<b>Lon</b>
+<% @stations.each do |station| %>
+	
+
+	<li><%= station.lon %></li>
+
+
+<%end%>
+
+</ul>
+
+

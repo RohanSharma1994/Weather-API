@@ -1,13 +1,16 @@
 Rails.application.routes.draw do
-   get 'welcome/index'
+  get 'welcome/index'
 
-  get 'weather/data/:post_code/:date' => 'weather#data'
+
 
   root 'welcome#index'
+  get 'wearher/test' => 'weather#test'
 
   get 'weather/locations' => 'weather#locations'
 
-  get 'weather/data/:location_id/:date' => 'weather#location_per_id'
+  get 'weather/data/:location_id/:date' => 'weather#data_per_id'
+
+  get 'weather/mydata/:post_code/:date' => 'weather#data_per_post_code'
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

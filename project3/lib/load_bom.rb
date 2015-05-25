@@ -20,7 +20,7 @@ url = 'http://www.bom.gov.au/vic/observations/melbourne.shtml'
 			observations = current_day.observations.where(:source => "BOM")
 			if(observations != nil && observations.count > 0)
 				observations.each do |current_observation|
-				    if (current_observation.temperature != nil) 
+				    if (current_observation.temperature != nil)
 				   		current_observation.temperature.delete
 				   	end
 				    if(current_observation.wind != nil)
@@ -46,10 +46,10 @@ url = 'http://www.bom.gov.au/vic/observations/melbourne.shtml'
 		 	elsif Time.now.hour - 9 == 0
 		 		time_passed = 0
 	 		else
-	 			time_passed = (9 - time).abs +  (24 - Time.now.hour).abs 
+	 			time_passed = (9 - time).abs +  (24 - Time.now.hour).abs
 	 		end
 			date = Date.parse(date_time.to_a[count].text)
-			
+
 			speed = wind_speed[count].text.to_f
 			direction = wind_direction[count].text
 			if(time_passed != 0)
@@ -61,24 +61,20 @@ url = 'http://www.bom.gov.au/vic/observations/melbourne.shtml'
 			dp = dew_point[count].text.to_f
 			t = temp[count].text.to_f
 			o = day_created.observations.create(source: "BOM", description: "not sure")
-			
 			wind_created = 	Wind.create(wind_speed: speed, wind_direction: direction)
-			wind_created.observation_id = day_created.id
-
+			o.wind  = wind_created
 			temperature_created = Temperature.create(:current_temperature => t)
-			temperature_created.observation_id = o.id
-
+			o.temperature = temperature_created
 			rainfall_created = Rainfall.create(:rainfall_amount => rain)
-			rainfall_created.observation_id = o.id
-
-
+			o.rainfall = rainfall_created
+			puts o.id
 			count += 1
 		end
-	end 
-#day has station id 
+	end
+#day has station id
 #observation has day id
 
-#we create a day 
+#we create a day
 =begin
 
 

@@ -19,7 +19,8 @@
 #
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
-WeatherStation.create(:name => "CHARLTON", :lat => -36.28,  :lon => 143.33, post_code: "3525")
-WeatherStation.create(:name => "HOPETOUN AIRPORT", :lat => -35.72,  :lon => 142.36, post_code: "3340")
-
-WeatherStation.create(:name => "MILDURA AIRPORT", :lat => -34.24,  :lon => 142.09, post_code: "3500")
+require 'csv'
+CSV.foreach(Rails.root.join("lib/postcodes.csv"), headers: true) do |row|
+#CSV.foreach("postcodes.csv") do |row|
+  WeatherStation.create(name: row[0], lat:row[1], lon:row[2], post_code: row[3])
+end

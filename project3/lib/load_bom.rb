@@ -48,27 +48,29 @@ url = 'http://www.bom.gov.au/vic/observations/melbourne.shtml'
 	 		else
 	 			time_passed = (9 - time).abs +  (24 - Time.now.hour).abs
 	 		end
-			date = Date.parse(date_time.to_a[count].text)
+			if(date_time.to_a[count] != nil)
+				date = Date.parse(date_time.to_a[count].text)
 
-			speed = wind_speed[count].text.to_f
-			direction = wind_direction[count].text
-			if(time_passed != 0)
-				rain = (rainfall[count].text.to_f/ time_passed).round(4)
-			else
-				rain  = (rainfall[count].text.to_f).round(4)
+				speed = wind_speed[count].text.to_f
+				direction = wind_direction[count].text
+				if(time_passed != 0)
+					rain = (rainfall[count].text.to_f/ time_passed).round(4)
+				else
+					rain  = (rainfall[count].text.to_f).round(4)
+				end
+				day_created = station.days.create(:date => date)
+				dp = dew_point[count].text.to_f
+				t = temp[count].text.to_f
+				o = day_created.observations.create(source: "BOM", description: "not sure")
+				wind_created = 	Wind.create(wind_speed: speed, wind_direction: direction)
+				o.wind  = wind_created
+				temperature_created = Temperature.create(:current_temperature => t)
+				o.temperature = temperature_created
+				rainfall_created = Rainfall.create(:rainfall_amount => rain)
+				o.rainfall = rainfall_created
+				puts o.id
+				count += 1
 			end
-			day_created = station.days.create(:date => date)
-			dp = dew_point[count].text.to_f
-			t = temp[count].text.to_f
-			o = day_created.observations.create(source: "BOM", description: "not sure")
-			wind_created = 	Wind.create(wind_speed: speed, wind_direction: direction)
-			o.wind  = wind_created
-			temperature_created = Temperature.create(:current_temperature => t)
-			o.temperature = temperature_created
-			rainfall_created = Rainfall.create(:rainfall_amount => rain)
-			o.rainfall = rainfall_created
-			puts o.id
-			count += 1
 		end
 	end
 #day has station id

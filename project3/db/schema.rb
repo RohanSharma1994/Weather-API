@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150526130138) do
+ActiveRecord::Schema.define(version: 20150526153431) do
 
   create_table "days", force: :cascade do |t|
     t.date     "date"
@@ -78,11 +78,11 @@ ActiveRecord::Schema.define(version: 20150526130138) do
 
   create_table "winds", force: :cascade do |t|
     t.float    "wind_speed"
-    t.string   "wind_direction"
     t.datetime "created_at",     null: false
     t.datetime "updated_at",     null: false
     t.integer  "observation_id"
     t.integer  "prediction_id"
+    t.float    "wind_direction"
   end
 
   add_index "winds", ["observation_id"], name: "index_winds_on_observation_id"

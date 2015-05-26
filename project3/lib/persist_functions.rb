@@ -60,7 +60,7 @@ def persist_data name, source, temperature, wind_speed, wind_direction, rain
 		if not day
 			day = weather_station.days.create(date:Date.today)
 		end
-		desc = description wind_speed, rain, temperature
+		desc = description wind_speed.to_f, rain.to_f, temperature.to_f
 		# Add a new observation to today
 		observation = day.observations.create(description: desc, source: source)
 		# Store the specific observations for this observation
@@ -69,7 +69,5 @@ def persist_data name, source, temperature, wind_speed, wind_direction, rain
 		observation.temperature = Temperature.create(current_temperature: temperature)
 		# Persist
 		observation.save
-	else 
-		puts "#{name} not found my g."
 	end
 end

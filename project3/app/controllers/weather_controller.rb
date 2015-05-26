@@ -41,7 +41,18 @@ class WeatherController < ApplicationController
 	# given post code on a given date.
 	# Responds to the request: weather/data/:post_code/:date
 	def data_per_post_code
-
+		# Find all the weather stations inside the post code
+		@weather_stations = WeatherStation.where(post_code: params[:post_code])
+		# A JSON hash to respond with
+		if @weather_stations
+			hash = JSON.parse(@weather_stations.post_code_json @weather_stations, params[:date])
+		else
+			hash = {}
+		end
+		respond_to do |format|
+			format.html
+			format.json {render json: JSON.pretty_generate(hash)}
+		end
 	end
 
 end

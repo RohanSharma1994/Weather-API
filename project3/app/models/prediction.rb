@@ -22,8 +22,8 @@ class Prediction < ActiveRecord::Base
 	# Returns the predictions for that period and postcode
 	def self.post_code_prediction post_code, period
 		# Find the latitude and longitude of this post code using another API
-		BASE_URL = 'http://v0.postcodeapi.com.au/suburbs/'
-		json = JSON.parse(open("#{BASE_URL}"+post_code+".json").read)
+		base_url = 'http://v0.postcodeapi.com.au/suburbs/'
+		json = JSON.parse(open("#{base_url}"+post_code+".json").read)
 		lat = json[0]["latitude"]
 		lon = json[0]["longitude"]
 		lat_lon_prediction period, lat, lon

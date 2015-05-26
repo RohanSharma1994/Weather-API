@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150518115120) do
+ActiveRecord::Schema.define(version: 20150526053525) do
 
   create_table "days", force: :cascade do |t|
     t.date     "date"
@@ -32,23 +32,40 @@ ActiveRecord::Schema.define(version: 20150518115120) do
 
   add_index "observations", ["day_id"], name: "index_observations_on_day_id"
 
+  create_table "predictions", force: :cascade do |t|
+    t.time     "time"
+    t.float    "rain_probability"
+    t.float    "wind_speed_probability"
+    t.float    "wind_direction_probability"
+    t.float    "temperature_probability"
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
+    t.integer  "weather_station_id"
+  end
+
+  add_index "predictions", ["weather_station_id"], name: "index_predictions_on_weather_station_id"
+
   create_table "rainfalls", force: :cascade do |t|
     t.float    "rainfall_amount"
     t.datetime "created_at",      null: false
     t.datetime "updated_at",      null: false
     t.integer  "observation_id"
+    t.integer  "prediction_id"
   end
 
   add_index "rainfalls", ["observation_id"], name: "index_rainfalls_on_observation_id"
+  add_index "rainfalls", ["prediction_id"], name: "index_rainfalls_on_prediction_id"
 
   create_table "temperatures", force: :cascade do |t|
     t.float    "current_temperature"
     t.datetime "created_at",          null: false
     t.datetime "updated_at",          null: false
     t.integer  "observation_id"
+    t.integer  "prediction_id"
   end
 
   add_index "temperatures", ["observation_id"], name: "index_temperatures_on_observation_id"
+  add_index "temperatures", ["prediction_id"], name: "index_temperatures_on_prediction_id"
 
   create_table "weather_stations", force: :cascade do |t|
     t.string   "name"
@@ -65,8 +82,10 @@ ActiveRecord::Schema.define(version: 20150518115120) do
     t.datetime "created_at",     null: false
     t.datetime "updated_at",     null: false
     t.integer  "observation_id"
+    t.integer  "prediction_id"
   end
 
   add_index "winds", ["observation_id"], name: "index_winds_on_observation_id"
+  add_index "winds", ["prediction_id"], name: "index_winds_on_prediction_id"
 
 end

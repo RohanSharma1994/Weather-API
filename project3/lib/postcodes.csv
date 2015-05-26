@@ -1,14 +1,14 @@
 name,lat,lon,post_code
-CHARLTON,-36.28,143.33,3525
-HOPETOUN AIRPORT,-35.72,142.36,3396
-kerang,-35.72,143.92,3579
-mildura,-34.24,142.09,3500
-ouyen,-35.07,142.31,3490
-swan hill,-35.08,143.54,3585
-walpeup RS,-35.12,142,3507
-edenhope airport,-37.02,141.27,3318
-horsham,-36.67,142.17,3400
-kanagulk,-37.12,141.8,3401
+Charlton,-36.28,143.33,3525
+Hopetoun Airport,-35.72,142.36,3396
+Kerang,-35.72,143.92,3579
+Mildura,-34.24,142.09,3500
+Ouyen,-35.07,142.31,3490
+Swan Hill,-35.08,143.54,3585
+Walpeup RS,-35.12,142,3507
+Edenhope,-37.02,141.27,3318
+Horsham,-36.67,142.17,3400
+Kanagulk,-37.12,141.8,3401
 Longerenong,-36.67,142.3,3401
 Nhill Aerodrome,-36.31,141.65,3418
 Stawell,-37.07,142.74,3380
@@ -29,29 +29,29 @@ Portland Harbour,-38.34,141.61,3305
 Warrnambool,-38.29,142.45,3280
 Westmere,-37.71,142.94,3351
 Aireys Inlet,-38.46,144.09,3231
-avalon,-38.03,144.48,3212
+Avalon,-38.03,144.48,3212
 Ballarat,-37.51,143.79,3350
-bundoora,-37.72,145.05,3083
-cerberus,-38.36,145.18,3920
-coldstream,-37.72,145.41,3770
-essendon-airport,-37.73,144.91,3040
-fawkner-beacon,-37.91,144.93,3060
-ferny-creek,-37.87,145.35,3786
-frankston,-38.15,145.12,3199
-geelong-racecourse,-38.17,144.38,3220
-laverton,-37.86,144.76,3028
-melbourne-airport,-37.67,144.83,3045
-melbourne-olympic-park,-37.83,144.98,3001
-moorabbin-airport,-37.98,145.1,3194
+Bundoora,-37.72,145.05,3083
+Cerberus,-38.36,145.18,3920
+Coldstream,-37.72,145.41,3770
+Essendon Airport,-37.73,144.91,3040
+Fawkner Beacon,-37.91,144.93,3060
+Ferny Creek,-37.87,145.35,3786
+Frankston,-38.15,145.12,3199
+Geelong Racecourse,-38.17,144.38,3220
+Laverton,-37.86,144.76,3028
+Melbourne Airport,-37.67,144.83,3045
+Melbourne (Olympic Park),-37.83,144.98,3001
+Moorabbin Airport,-37.98,145.1,3194
 Phillip Island,-38.51,145.15,3922
-point-wilson,-38.1,144.54,3212
+Point Wilson,-38.1,144.54,3212
 Pound Creek,-38.63,145.81,3996
-rhyll,-38.46,145.31,3923
-scoresby,-37.87,145.26,3179
-sheoaks,-37.91,144.13,3331
-south-channel-island,-38.31,144.8,3936
-st-kilda-harbour-rmys,-37.86,144.96,3182
-viewbank,-37.74,145.1,3084
+Rhyll,-38.46,145.31,3923
+Scoresby,-37.87,145.26,3179
+Sheoaks,-37.91,144.13,3331
+South Channel Island,-38.31,144.8,3936
+St Kilda Harbour RMYS,-37.86,144.96,3182
+Viewbank,-37.74,145.1,3084
 Wonthaggi,-38.61,145.6,3995
 Bendigo,-36.74,144.33,3550
 Echuca,-36.16,144.76,3564

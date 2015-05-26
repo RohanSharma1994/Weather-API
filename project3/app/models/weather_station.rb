@@ -2,6 +2,7 @@ require 'date'
 include Math
 class WeatherStation < ActiveRecord::Base
 	has_many :days
+	has_many :predictions
 
 	def as_json(options = nil)
 		hash = {  :id => self.name, :lat => self.lat, :lon => self.lon, :post_code => self.post_code}

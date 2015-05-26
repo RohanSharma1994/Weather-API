@@ -152,4 +152,23 @@ class Regression
 		logarithmic_regression x_array, y_array
 		exponential_regression x_array, y_array
 	end
+
+	# This function can be called by the client to get an extrapolation
+	def extrapolate n
+		if @type == :none
+			return
+		elsif @type == :polynomial
+			sum = 0
+			@coefficients.each_index {|i| sum += @coefficients[i]*(n**i)}
+			return sum
+		elsif @type == :logarithmic
+			sum = coefficients[0]*Math.log(n) + coefficients[1]
+			return sum
+		elsif @type == :exponential
+			sum = coefficients[0]*Math.exp(coefficients[1]*n)
+			return sum
+		else
+			return nil
+		end
+	end
 end

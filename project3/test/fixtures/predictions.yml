@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  time: 2015-05-26 15:32:16
+  rain_probability: 1.5
+  wind_speed_probability: 1.5
+  wind_direction_probability: 1.5
+  temperature_probability: 1.5
+
+two:
+  time: 2015-05-26 15:32:16
+  rain_probability: 1.5
+  wind_speed_probability: 1.5
+  wind_direction_probability: 1.5
+  temperature_probability: 1.5

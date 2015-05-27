@@ -1,0 +1,39 @@
+<!-- Display the data the user inputted -->
+<pre>Post Code: <%= params[:post_code] %>, Date: <%= params[:date] %></pre>
+<!-- If there are no weather stations print an error message -->
+<% if @weather_stations.length == 0 %>
+	<h3 class="bg-danger">No weather stations found in this post code. Try another post code.</h3>
+<% else %>
+	<!-- Print a table of observations for each weather station -->
+	<% for weather_station in @weather_stations %>
+	    <!-- Display the weather station information -->
+		<pre> Location ID: <%= weather_station.name %>, Latitude: <%= weather_station.lat %>, Longitude: <%= weather_station.lon %>, Last Updated: <%= weather_station.updated_at.strftime('%H:%M%P %d-%m-%Y') %></pre>
+		<!-- Print an error message if there are no observations -->
+		<% day = weather_station.days.find_by(date:Date.parse(params[:date])) %>
+		<% if not day %>
+			<h3 class="bg-danger">No observations found.</h3>
+		<% else %>
+			<!-- Show a table of observations -->
+			<table class="table table-striped table-bordered">
+				<!-- Table header -->
+				<tr class="info">
+					<th><h4>Time</h4></th>
+					<th><h4>Temperature (C°)</h4></th>
+					<th><h4>Rainfall Intensity (mm/10min)</h4></th>
+					<th><h4>Wind Direction (Bearings°)</h4></th>
+					<th><h4>Wind Speed (km/h)</h4></th>
+				</tr>
+				<!-- Table body -->
+				<% for observation in day.observations %>
+					<tr>
+					<th><h5><%= observation.created_at.strftime('%I:%M:%S %P')%></h5></th>
+					<th><h5><%= observation.temperature.current_temperature%></h5></th>
+					<th><h5><%= observation.rainfall.rainfall_amount%></h5></th>
+					<th><h5><%= observation.wind.wind_direction%></h5></th>
+					<th><h5><%= observation.wind.wind_speed%></h5></th>
+					</tr>
+				<% end %>
+			</table>
+		<% end %>
+	<% end %>
+<% end %>

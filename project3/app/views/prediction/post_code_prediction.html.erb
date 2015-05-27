@@ -1,0 +1,30 @@
+<!-- Output the information the user passed in -->
+<pre>Post Code: <%= params[:post_code] %>, Period: <%= params[:period] %> </pre>
+<!-- Output the table of predictions -->
+<table class="table table-striped table-bordered">
+	<!-- Table header -->
+	<tr class="info">
+		<th><h5>Minutes from <%= @hash["0"]["time"]%></h5></th>
+		<th><h5>Rainfall prediction (mm/10min)</h5></th>
+		<th><h5>Rainfall probability</h5></th>
+		<th><h5>Temperature prediction (C°)</h5></th>
+		<th><h5>Temperature probability</h5></th>
+		<th><h5>Wind Speed prediction (km/h)</h5></th>
+		<th><h5>Wind Speed probability</h5></th>
+		<th><h5>Wind Direction prediction (Bearings°)</h5></th>
+		<th><h5>Wind Direction probability</h5></th>
+	</tr>
+	<% @hash.each do |key, value| %>
+		<tr>
+		<th><h5><%=key%></h5></th>
+		<th><h5><%=value["rain"]["value"]%></h5></th>
+		<th><h5><%=value["rain"]["probability"]%></h5></th>
+		<th><h5><%=value["temp"]["value"]%></h5></th>
+		<th><h5><%=value["temp"]["probability"]%></h5></th>
+		<th><h5><%=value["wind_speed"]["value"]%></h5></th>
+		<th><h5><%=value["wind_speed"]["probability"]%></h5></th>
+		<th><h5><%=value["wind_direction"]["value"]%></h5></th>
+		<th><h5><%=value["wind_direction"]["probability"]%></h5></th>
+		</tr>
+	<% end %>
+</table>

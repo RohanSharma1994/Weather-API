@@ -4,12 +4,12 @@ class PredictionController < ApplicationController
 	# Responds to the request: GET '/weather/prediction/:post_code/:period'
 	def post_code_prediction
 		# A JSON hash to respond with
-		hash = Prediction.post_code_prediction params[:post_code], params[:period]
+		@hash = Prediction.post_code_prediction params[:post_code], params[:period]
 		respond_to do |format|
 			format.html
 			format.json {render json: JSON.pretty_generate({
 				"post_code" => "#{params[:post_code]}",
-				"predictions" => hash
+				"predictions" => @hash
 			})}
 		end
 	end

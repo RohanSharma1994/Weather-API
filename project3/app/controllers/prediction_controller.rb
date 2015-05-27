@@ -7,7 +7,10 @@ class PredictionController < ApplicationController
 		hash = Prediction.post_code_prediction params[:post_code], params[:period]
 		respond_to do |format|
 			format.html
-			format.json {render json: JSON.pretty_generate(hash)}
+			format.json {render json: JSON.pretty_generate({
+				"post_code" => "#{params[:post_code]}",
+				"predictions" => hash
+			})}
 		end
 	end
 
@@ -19,7 +22,11 @@ class PredictionController < ApplicationController
 		hash = Prediction.lat_lon_prediction params[:period], params[:lat], params[:lon]
 		respond_to do |format|
 			format.html
-			format.json {render json: JSON.pretty_generate(hash)}
+			format.json {render json: JSON.pretty_generate({
+				"latitude" => "#{params[:lat]}",
+				"longitude" => "#{params[:lon]}",
+				"predictions" => hash
+			})}
 		end
 	end
 end

@@ -17,5 +17,5 @@ Rails.application.routes.draw do
   #<-----Predictions system----->
   get '/weather/prediction/:post_code/:period' => 'prediction#post_code_prediction'
 
-  get '/weather/prediction/:lat/:lon/:period' => 'prediction#lat_lon_prediction'
+  get '/weather/prediction/*lat/*lon/*period' => 'prediction#lat_lon_prediction'
 end

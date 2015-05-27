@@ -1,39 +1,21 @@
-<%=	@station.class%>
-<h3> WeatherStations</h3>
-<br>
-<ul style = "display: inline-block; list-style-type: none" >
-<b>Name</b>
-<% @stations.each do |station| %>
-	
-
-	<li><%= station.name %></li>
-
-
-<%end%>
-
-</ul>
-
-<ul style = "display: inline-block; list-style-type: none" >
-<b>Lat</b>
-<% @stations.each do |station| %>
-	
-
-	<li><%= station.lat %></li>
-
-
-<%end%>
-
-</ul>
-<ul style = "display: inline-block; list-style-type: none" >
-<b>Lon</b>
-<% @stations.each do |station| %>
-	
-
-	<li><%= station.lon %></li>
-
-
-<%end%>
-
-</ul>
-
-
+<!-- Display today's date -->
+<pre>Date: <%= Date.today.strftime("%d-%m-%Y") %></pre>
+<!-- Display all the weather stations in the database -->
+<table class="table table-striped table-bordered">
+<!-- Table header -->
+<tr class="info">
+	<th><h4>ID</h4></th>
+	<th><h4>Latitude</h4></th>
+	<th><h4>Longitude</h4></th>
+	<th><h4>Last Updated</h4></th>
+</tr>
+<!-- Table body -->
+<% for weather_station in @weather_stations %>
+	<tr>
+		<th><h5><%=weather_station.name%></h5></th>
+		<th><h5><%=weather_station.lat%></h5></th>
+		<th><h5><%=weather_station.lon%></h5></th>
+		<th><h5><%=weather_station.updated_at.strftime('%H:%M%P %d-%m-%Y')%></h5></th>
+	</tr>
+<% end %>
+</table>

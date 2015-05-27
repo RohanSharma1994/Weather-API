@@ -49,8 +49,8 @@ class Prediction < ActiveRecord::Base
 			lon = json[0]["longitude"]
 		else
 			# This post code isn't a victorian post code according to postcodeapi
-			# Just return empty array
-			return []
+			# Just return a helpful message
+			return "That isn't a valid Victoria post code according to our API."
 		end
 		lat_lon_prediction period, lat, lon
 	end

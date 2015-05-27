@@ -44,8 +44,14 @@ class Prediction < ActiveRecord::Base
 		# Find the latitude and longitude of this post code using another API
 		base_url = 'http://v0.postcodeapi.com.au/suburbs/'
 		json = JSON.parse(open("#{base_url}"+post_code+".json").read)
-		lat = json[0]["latitude"]
-		lon = json[0]["longitude"]
+		if json[0]
+			lat = json[0]["latitude"]
+			lon = json[0]["longitude"]
+		else
+			# This post code isn't a victorian post code according to postcodeapi
+			# Just return empty array
+			return []
+		end
 		lat_lon_prediction period, lat, lon
 	end
 

@@ -1,3 +1,4 @@
+ONE_PERIOD = 10
 class Prediction < ActiveRecord::Base
 	# Relationships
 	belongs_to :weather_station
@@ -57,7 +58,7 @@ class Prediction < ActiveRecord::Base
 		# Put the number of predictions asked for inside the array of hash maps.
 		array.each_index do |i|
 			weather_station = array[i]["weather_station"]
-			array[i]["predictions"] = weather_station.limit(period/ONE_PERIOD).order('created_at asc')
+			array[i]["predictions"] = weather_station.predictions.limit(period/ONE_PERIOD).order('created_at asc')
 		end
 
 		# A temperature hash which represents time and temperature prediction

@@ -1,4 +1,5 @@
 class Observation < ActiveRecord::Base
+	# Relationships
 	belongs_to :day
 	has_one :wind
 	has_one :rainfall

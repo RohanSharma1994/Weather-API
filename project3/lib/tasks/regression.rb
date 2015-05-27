@@ -21,7 +21,11 @@ class Regression
 		x_data = x_array.map { |x_i| (0..degree).map {|pow| (x_i**pow).to_f}}
 		mx = Matrix[*x_data]
 		my = Matrix.column_vector(y_array)
-		coefficients = ((mx.t*mx).inv * mx.t * my).transpose.to_a[0]
+		begin
+			coefficients = ((mx.t*mx).inv * mx.t * my).transpose.to_a[0]
+		rescue ExceptionForMatrix::ErrNotRegular
+		    return
+		end
 		# Get the y-values predicted by performing this regression
 		y_predicted = []
 		x_array.each do |x|
@@ -160,13 +164,13 @@ class Regression
 		elsif @type == :polynomial
 			sum = 0
 			@coefficients.each_index {|i| sum += @coefficients[i]*(n**i)}
-			return sum
+			return sum.abs
 		elsif @type == :logarithmic
 			sum = coefficients[0]*Math.log(n) + coefficients[1]
-			return sum
+			return sum.abs
 		elsif @type == :exponential
 			sum = coefficients[0]*Math.exp(coefficients[1]*n)
-			return sum
+			return sum.abs
 		else
 			return nil
 		end

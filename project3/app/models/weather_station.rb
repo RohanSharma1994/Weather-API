@@ -39,6 +39,6 @@ class WeatherStation < ActiveRecord::Base
 			}
 			final_hash["locations"].push sub_hash
 		end
-		return final_hash.to_json
+		return final_hash
 	end
 end

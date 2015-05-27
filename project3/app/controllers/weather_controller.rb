@@ -45,7 +45,7 @@ class WeatherController < ApplicationController
 		@weather_stations = WeatherStation.where(post_code: params[:post_code])
 		# A JSON hash to respond with
 		if @weather_stations
-			hash = JSON.parse(@weather_stations.post_code_json @weather_stations, params[:date])
+			hash = @weather_stations.post_code_json @weather_stations, params[:date]
 		else
 			hash = {}
 		end

@@ -46,6 +46,4 @@ class Day < ActiveRecord::Base
 		    "measurements" => JSON.parse(self.observations.to_json)
 		}
 	end
-
-
 end

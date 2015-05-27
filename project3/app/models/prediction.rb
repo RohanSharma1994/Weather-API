@@ -1,3 +1,8 @@
+# Libraries required 
+require 'json'
+require 'open-uri'
+require 'date'
+# Constants
 ONE_PERIOD = 10
 # Radius of earth in km
 RADIUS = 6371
@@ -8,9 +13,10 @@ DISTANCE_NORMALIZER = 25.0
 # predictions 3 hours in the future,
 # this number is 18.
 PREDICTION_NORMALIZER = 18.0
-require 'json'
-require 'open-uri'
-require 'date'
+# If we find a weather station within
+# a 5km radius of our location, we will
+# not use the Triangle method.
+LIMIT = 5.0
 
 # The prediction retrieval system
 class Prediction < ActiveRecord::Base
@@ -65,15 +71,20 @@ class Prediction < ActiveRecord::Base
 	# to calculate rough probability of extrapolation.
 	# Distance: Distance to the closest weather station.
 	def self.variance val1, val2, val3, prediction, distance
-
 		# Get the average variance
 		avg_variance = average val1, val2, val3
-		# Initially probability can be the average variance
-		probability = avg_variance
 		# As distance increases, the accuracy of our predictions decrease.
 		# This can be modelled by constricting distances in between 0 to 1.
 		# Take distance into account first, also take into account how far we are predicting in the future
 		probability = avg_variance - (2.0/Math::PI)*Math.atan(distance/DISTANCE_NORMALIZER + prediction/PREDICTION_NORMALIZER)
+	end
+
+	# A class method which returns the probability of a prediction(Single variance).
+	# Takes in a number to indicate how far out a prediction is being made
+	# to calculate rough probability of extrapolation.
+	# Distance: Distance to the closest weather station.
+	def self.single_variance val, prediction, distance
+		probability = val - (2.0/Math::PI)*Math.atan(distance/DISTANCE_NORMALIZER + prediction/PREDICTION_NORMALIZER)
 	end
 
 	# A class method which gets the predictions for a given latitude,
@@ -121,17 +132,36 @@ class Prediction < ActiveRecord::Base
 			one = array[0]["predictions"][i]
 			two = array[1]["predictions"][i]
 			three = array[2]["predictions"][i]
+			# Distance of the closest weather station
+			distance = array[0]["distance"]
 
 			# The probability of our predictions wane as time increases
 			# Initially the probability can be the average variance of the three weather stations
-			rain_variance = variance one.rain_variance, two.rain_variance, three.rain_variance, i, array[0]["distance"]
-			temp_variance = variance one.temperature_variance, two.temperature_variance, three.temperature_variance, i, array[0]["distance"]
-			wind_spd_variance = variance one.wind_speed_variance, two.wind_speed_variance, three.wind_speed_variance, i, array[0]["distance"]
-			wind_dir_variance = variance one.wind_direction_variance, two.wind_direction_variance, three.wind_direction_variance, i, array[0]["distance"]
-			avg_temp = average one.temp, two.temp, three.temp
-			avg_rain = average one.rain, two.rain, three.rain
-			avg_wind_spd = average one.wind_spd, two.wind_spd, three.wind_spd
-			avg_wind_dir = average one.wind_dir, two.wind_dir, three.wind_dir
+
+			# Check if the closest weather station is less than 5km away
+			if(distance<=LIMIT)
+				# There is a station close enough, so don't use the triangle method 
+				rain_variance = single_variance one.rain_variance, i, distance
+				temp_variance = single_variance one.temperature_variance, i, distance
+				wind_spd_variance = single_variance one.wind_speed_variance, i, distance
+				wind_dir_variance = single_variance one.wind_direction_variance, i, distance
+				avg_temp = one.temp
+				avg_rain = one.rain
+				avg_wind_spd = one.wind_spd
+				avg_wind_dir = one.wind_dir
+			else
+				# It isn't so use the triangle method
+				rain_variance = variance one.rain_variance, two.rain_variance, three.rain_variance, i, distance
+				temp_variance = variance one.temperature_variance, two.temperature_variance, three.temperature_variance, i, distance
+				wind_spd_variance = variance one.wind_speed_variance, two.wind_speed_variance, three.wind_speed_variance, i, distance
+				wind_dir_variance = variance one.wind_direction_variance, two.wind_direction_variance, three.wind_direction_variance, i, distance
+				avg_temp = average one.temp, two.temp, three.temp
+				avg_rain = average one.rain, two.rain, three.rain
+				avg_wind_spd = average one.wind_spd, two.wind_spd, three.wind_spd
+				avg_wind_dir = average one.wind_dir, two.wind_dir, three.wind_dir
+			end
+
+
 			hash["#{i*ONE_PERIOD}"] = {
 				"time" => "#{time.strftime('%H:%M%P %d-%m-%Y')}",
 				"rain" => {

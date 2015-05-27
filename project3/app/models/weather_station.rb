@@ -27,7 +27,7 @@ class WeatherStation < ActiveRecord::Base
 			if(day)
 				observations = day.observations
 			else
-				observations = nil
+				observations = {}
 			end
 			# Create and return a hash representing stations in this post code
 			sub_hash = {		    

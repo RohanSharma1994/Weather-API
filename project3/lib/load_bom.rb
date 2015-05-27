@@ -3,6 +3,7 @@
 require 'nokogiri'
 require 'open-uri'
 require_relative 'persist_functions.rb'
+require_relative 'prediction.rb'
 
 url = 'http://www.bom.gov.au/vic/observations/vicall.shtml'
 doc = Nokogiri::HTML(open(url))
@@ -35,3 +36,6 @@ for table_id in table_ids
 		persist_data name, SOURCEBOM, temperature,  wind_speed, wind_direction, rain
 	end
 end
+
+# Make a prediction for each of these weather stations
+make_prediction

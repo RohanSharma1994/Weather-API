@@ -1,6 +1,6 @@
 # Regression class
 require 'matrix'
-
+ZERO = 0.01
 # A Regression class which performs many different regressions
 # and decides on the best one out of {linear, polynomial, exponential,
 # logarithmic}
@@ -51,6 +51,9 @@ class Regression
 
 		x_array.each_index do |i|
 			begin 
+				if x_array[i] <= ZERO
+					return
+				end
 				ylogx_sum += y_array[i]*Math.log(x_array[i])
 				y_sum += y_array[i]
 				logx_sum += Math.log(x_array[i])
@@ -91,6 +94,9 @@ class Regression
 
 		x_array.each_index do |i|
 			begin 
+				if y_array[i] <= ZERO
+					return
+				end				
 				logy_sum += Math.log(y_array[i])
 				x_squared_sum += x_array[i]**2
 				x_sum += x_array[i]
@@ -139,6 +145,9 @@ class Regression
 		y_array.each_index do |i|
 			sse += (y_array[i] - y_predicted_array[i])**2
 			sst += (y_array[i] - y_mean)**2
+			if sst <= ZERO
+				return 1
+			end
 		end
 		return (1-sse/sst)
 	end
@@ -149,6 +158,13 @@ class Regression
 		@type = :none
 		@coefficients = []
 		@r_2 = 0
+		# Return if there is one x or y value
+		if x_array.length == 1 
+			@type = :polynomial
+			@coefficients = [y_array[0]]
+			@r_2 = 1
+			return
+		end
 		# Do all the possible regressions 
 		for i in (1..10)
 			polynomial_regression x_array, y_array, i

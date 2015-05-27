@@ -1,0 +1,31 @@
+<!-- Display the date user passed in -->
+<!-- And the location id they passed in -->
+<pre>Date: <%= Date.parse(params[:date]).strftime("%d-%m-%Y") %>, Location ID: <%= params[:location_id] %>, Current Temperature: <%=@current_temperature%>, Current Condition: <%=@current_condition%></pre>
+<!-- Check if there is any observations on this day -->
+<% if not @day %>
+	<!-- No observations, so print an error message. -->
+	<h3 class="bg-danger">No observations found.</h3>
+<% else %>
+	<!-- We have some observations, display them in a table -->
+	<table class="table table-striped table-bordered">
+		<!-- Table header -->
+		<tr class="info">
+			<th><h4>Time</h4></th>
+			<th><h4>Temperature (C°)</h4></th>
+			<th><h4>Rainfall Intensity (mm/10min)</h4></th>
+			<th><h4>Wind Direction (Bearings°)</h4></th>
+			<th><h4>Wind Speed (km/h)</h4></th>
+		</tr>
+		<!-- Table body -->
+		<% for observation in @day.observations %>
+			<tr>
+			<th><h5><%= observation.created_at.strftime('%I:%M:%S %P')%></h5></th>
+			<th><h5><%= observation.temperature.current_temperature%></h5></th>
+			<th><h5><%= observation.rainfall.rainfall_amount%></h5></th>
+			<th><h5><%= observation.wind.wind_direction%></h5></th>
+			<th><h5><%= observation.wind.wind_speed%></h5></th>
+			</tr>
+
+		<% end %>
+</table>
+<% end %>

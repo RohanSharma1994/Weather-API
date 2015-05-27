@@ -24,13 +24,23 @@ class WeatherController < ApplicationController
 		# Find the appropriate date
 		if @weather_station
 			@day = @weather_station.days.find_by(date: Date.parse(params[:date]))
+		else 
+			@day = nil
 		end
 		# A JSON hash to respond with
 		if @day
 			hash = JSON.parse(@day.to_json)
 		else
-			hash = {}
+			hash = {
+				"date"=>"#{Date.parse(params[:date]).strftime("%d-%m-%Y")}",
+				"current_temp"=>"null",
+				"current_cond"=>"null",
+				"measurements"=>[]
+			}
 		end
+		# Get the current temperature and current condition for the view
+		@current_temperature = hash["current_temp"]
+		@current_condition = hash["current_cond"]
 		respond_to do |format|
 			format.html
 			format.json { render json: JSON.pretty_generate(hash)}

@@ -1,4 +1,9 @@
 ONE_PERIOD = 10
+# Radius of earth in km
+RADIUS = 6371
+require 'json'
+require 'open-uri'
+
 class Prediction < ActiveRecord::Base
 	# Relationships
 	belongs_to :weather_station
@@ -6,12 +11,17 @@ class Prediction < ActiveRecord::Base
 	has_one :temperature
 	has_one :wind
 
+	# Converts angle to radians
+	def self.to_radians angle
+		angle * Math::PI / 180
+	end
+
 	# Methods
 	# Returns the distance between two latitudes and longitudes
 	def self.distance lat1, lon1, lat2, lon2
-		d_lat = lat2 - lat1
-		d_lon = lon2 - lon1
-		a = ((Math.sin(d_lat/2))**2 + Math.cos(lat1)*Math.cos(lat2)*Math.son(d_lon/2))**2
+		d_lat = to_radians (lat2 - lat1)
+		d_lon = to_radians (lon2 - lon1)
+		a = (Math.sin(d_lat/2))**2 + Math.cos(to_radians lat1)*Math.cos(to_radians lat2)*(Math.sin(d_lon/2))**2
 		c = 2*Math.atan2(Math.sqrt(a), Math.sqrt(1-a))
 		# Return the distance
 		RADIUS*c
@@ -45,7 +55,7 @@ class Prediction < ActiveRecord::Base
 		for weather_station in weather_stations
 			distance = distance lat, lon, weather_station.lat, weather_station.lon
 			# Store this distance in an array of hash maps
-			array.push({"weather_station" => weather_stations, "distance" => distance})
+			array.push({"weather_station" => weather_station, "distance" => distance})
 		end
 
 		# Sort the array based on distances 
@@ -75,10 +85,10 @@ class Prediction < ActiveRecord::Base
 			prediction_one = array[0]["predictions"][i]
 			prediction_two = array[1]["predictions"][i]
 			prediction_three = array[2]["predictions"][i]
-			avg_temp = (prediction_one.temperature + prediction_two.temperature + prediction_three.temperature)/3
-			avg_rain = (prediction_one.rain + prediction_two.rain + prediction_three.rain)/3
-			avg_wind_spd = (prediction_one.wind_speed + prediction_two.wind_speed + prediction_three.wind_speed)/3
-			avg_wind_dir = (prediction_one.wind_direction + prediction_two.wind_direction + prediction_three.wind_direction)/3
+			avg_temp = (prediction_one.temperature.current_temperature + prediction_two.temperature.current_temperature + prediction_three.temperature.current_temperature)/3
+			avg_rain = (prediction_one.rainfall.rainfall_amount + prediction_two.rainfall.rainfall_amount + prediction_three.rainfall.rainfall_amount)/3
+			avg_wind_spd = (prediction_one.wind.wind_speed + prediction_two.wind.wind_speed + prediction_three.wind.wind_speed)/3
+			avg_wind_dir = (prediction_one.wind.wind_direction + prediction_two.wind.wind_direction + prediction_three.wind.wind_direction)/3
 			temperatures["#{i*ONE_PERIOD+ONE_PERIOD}"] = avg_temp
 			rain["#{i*ONE_PERIOD+ONE_PERIOD}"] = avg_rain
 			wind_speed["#{i*ONE_PERIOD+ONE_PERIOD}"] = avg_wind_spd

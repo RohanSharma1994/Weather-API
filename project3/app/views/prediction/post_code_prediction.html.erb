@@ -29,6 +29,8 @@
 		</tr>
 	<% end %>
 </table>
+<% elsif @hash.length == 0%>
+	<h3 class="bg-danger">No predictions calculated yet. Did you let our project initalize as per readme?</h3>
 <% else %>
-	<h3 class="bg-danger">According to our API, that isn't a valid Victoria post code.</h3>
+		<h3 class="bg-danger">No predictions calculated yet. Did you let our project initalize as per readme?</h3>
 <% end %>

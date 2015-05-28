@@ -1,9 +1,11 @@
 # A function which predicts the weather for each weather station
-# 10 minutes in the future.
 # Libraries required:
 require_relative 'regression.rb'
 WEEK = 7
 LIMIT = 4
+# The amount of predictions to make
+PREDICTIONS = 20
+
 
 def make_prediction
 	# Get a list of all weather stations
@@ -58,7 +60,7 @@ def make_prediction
 				rain.push observation.rainfall.rainfall_amount
 			end
 		end
-
+		puts "#{temperature}"
 		# Ensure there is enough data
 		if count == 0
 			next
@@ -66,33 +68,40 @@ def make_prediction
 
 		# Perform regression for each of these observations
 		regression = Regression.new
-		# Regress and predict the temperature
-		regression.regress time, temperature
-		predicted_temperature = regression.extrapolate count
-	    temperature_variance = regression.r_2
-		# Regress and predict the wind speed
-		regression.regress time, wind_speed
-		predicted_wind_speed = regression.extrapolate count
-		wind_speed_variance = regression.r_2
-		# Regress and predict the wind direction
-		regression.regress time, wind_direction
-		predicted_wind_direction = regression.extrapolate count
-		wind_direction_variance = regression.r_2
-		# Regress and predict the rain 
-		regression.regress time, rain
-		predicted_rain = regression.extrapolate count
-		rain_variance = regression.r_2
 
-		# Store this prediction for this weather station
-		prediction = weather_station.predictions.create(
-		 	temperature_variance: temperature_variance,
-		   	wind_speed_variance: wind_speed_variance,
-		   	wind_direction_variance: wind_direction_variance,
-		   	rain_variance: rain_variance
-		)
-		prediction.temperature = Temperature.create(current_temperature: predicted_temperature)
-		prediction.wind = Wind.create(wind_speed: predicted_wind_speed, wind_direction: predicted_wind_direction)
-	    prediction.rainfall = Rainfall.create(rainfall_amount: predicted_rain)
-		prediction.save
+		# Extrapolate
+		x = count
+		while x <= (count + PREDICTIONS)
+			# Regress the temperature
+			regression.regress time, temperature
+	    	temperature_variance = regression.r_2
+			predicted_temperature = regression.extrapolate x
+			# Regress the rain 
+			regression.regress time, rain
+			rain_variance = regression.r_2
+			predicted_rain = regression.extrapolate x
+			# Regress the wind direction
+			regression.regress time, wind_direction
+			wind_direction_variance = regression.r_2
+			predicted_wind_direction = regression.extrapolate x
+			# Regress the wind speed
+			regression.regress time, wind_speed
+			wind_speed_variance = regression.r_2
+			predicted_wind_speed = regression.extrapolate x
+
+
+			# Store this prediction for this weather station
+			prediction = weather_station.predictions.create(
+		 		temperature_variance: temperature_variance,
+		   		wind_speed_variance: wind_speed_variance,
+		   		wind_direction_variance: wind_direction_variance,
+		   		rain_variance: rain_variance
+			)
+			prediction.temperature = Temperature.create(current_temperature: predicted_temperature)
+			prediction.wind = Wind.create(wind_speed: predicted_wind_speed, wind_direction: predicted_wind_direction)
+	    	prediction.rainfall = Rainfall.create(rainfall_amount: predicted_rain)
+			prediction.save
+			x+=1
+		end
     end
 end

@@ -1,14 +1,66 @@
+<h2>About API</h2>
+<p>
+This API performs hyperlocal weather predictions within Victoria. There are two separate sub-systems within this API:
+<ul>
+<li>Data-retrieval system</li>
+	<ul>
+	<li>Provides data for many locations every 10 minutes.</li>
+	<li>Allows filtering of data via post codes.</li>
+	<li>Allows filtering of data via location names.</li>
+	<li>Uses Bureau of Meteorology to collect data every 10 minutes.</li>
+	</ul>
+<li>Prediction-retrieval system</li>
+	<ul>
+	<li>Provides predictions upto 3 hours into the future.</li>
+	<li>Provides predictions for post codes within Victoria.</li>
+	<li>Provides predictions for any latitude, or longitude within Victoria.</li>
+	<li>Provides a probability associated with the prediction.</li>
+	<li>Uses the triangular method to make predictions if no weather station is found within a 5km radius of the position requested. Explanation: 
+		<ol>
+			<li>Finds the 3 closest weather stations to the position.</li>
+			<li>These 3 stations form a triangular region around the position.</li>
+			<li>Aggregates the predictions made by the 3 weather stations.</li>
+		</ol>
+	</li>
+	</ul>
+</ul>
+</p>
+<h2>API Summary</h2>
 
-
-<h2>Dashboard</h2>
-
-
-<div style="position: relative;width: 600px; height: 600px;">    
-This peroject combines everything we have learnt so far in the subject, our design skills, our work on data parsing and regression and our understanding of rails to build a service that predicts hyperlocal weather patterns and provides this information to users through both an API and Webview.
-
-
-
-    <div style="position: absolute; bottom: 5px;">
-    &copy 2015; Rohan, Yash, Shon
-    </div>
-</div>
+<blockquote>
+	<kbd>GET 'weather/locations(.json|)'</kbd>
+	<footer>
+		<p>Lists all the weather stations in our database.</p>
+		<p> If .json specified, a JSON representation is returned.</p>
+	</footer>
+</blockquote>
+<blockquote>
+	<kbd>GET 'weather/data/:location_id/:date(.json|)'</kbd>
+	<footer>
+		<p>Lists all the observations for the :location_id on the given :date.</p>
+		<p> If .json specified, a JSON representation is returned.</p>
+	</footer>
+</blockquote>
+<blockquote>
+	<kbd>GET 'weather/data/:post_code/:date(.json|)'</kbd>
+	<footer>
+		<p>Lists all the observations for every station in the :post_code on the given :date.</p>
+		<p> If .json specified, a JSON representation is returned.</p>
+	</footer>
+</blockquote>
+<blockquote>
+	<kbd>GET 'weather/prediction/:post_code/:period(.json|)'</kbd>
+	<footer>
+		<p>Lists aggregated predictions for :post_code every 10 minutes for :period minutes.</p>
+		<p> If .json specified, a JSON representation is returned.</p>
+	</footer>
+</blockquote>
+<blockquote>
+	<kbd>GET 'weather/prediction/:lat/:lon/:period(.json|)'</kbd>
+	<footer>
+		<p>Lists aggregated predictions for :lat, :lon every 10 minutes for :period minutes.</p>
+		<p> If .json specified, a JSON representation is returned.</p>
+	</footer>
+</blockquote>
+	
+<center><h4>&copy 2015 Rohan, Yash, Shon</h4>

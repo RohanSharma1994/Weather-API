@@ -118,7 +118,7 @@ class Prediction < ActiveRecord::Base
 			weather_station = array[i]["weather_station"]
 			# Get the latest predictions from the database for this weather station
 			# The first prediction will represent the current conditions
-			array[i]["predictions"] = weather_station.predictions.limit(period/ONE_PERIOD + 1).order('created_at asc')
+			array[i]["predictions"] = weather_station.predictions.limit(period/ONE_PERIOD + 1).order('created_at desc')
 		end
 
 		# The final hash to respond with
@@ -134,7 +134,6 @@ class Prediction < ActiveRecord::Base
 			three = array[2]["predictions"][i]
 			# Distance of the closest weather station
 			distance = array[0]["distance"]
-
 			# The probability of our predictions wane as time increases
 			# Initially the probability can be the average variance of the three weather stations
 
@@ -156,6 +155,7 @@ class Prediction < ActiveRecord::Base
 				wind_spd_variance = variance one.wind_speed_variance, two.wind_speed_variance, three.wind_speed_variance, i, distance
 				wind_dir_variance = variance one.wind_direction_variance, two.wind_direction_variance, three.wind_direction_variance, i, distance
 				avg_temp = average one.temp, two.temp, three.temp
+				puts "one_temp = #{one.temp}, two_name = #{array[1]['weather_station'].name}, three_temp = #{three.temp}"
 				avg_rain = average one.rain, two.rain, three.rain
 				avg_wind_spd = average one.wind_spd, two.wind_spd, three.wind_spd
 				avg_wind_dir = average one.wind_dir, two.wind_dir, three.wind_dir

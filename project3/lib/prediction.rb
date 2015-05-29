@@ -3,11 +3,9 @@
 require_relative 'regression.rb'
 WEEK = 7
 LIMIT = 4
-# The amount of predictions to make
-PREDICTIONS = 20
 
-
-def make_prediction
+# Amount of predictions to make
+def make_prediction amount
 	# Get a list of all weather stations
 	weather_stations = WeatherStation.all
 	# Get the current time
@@ -60,7 +58,6 @@ def make_prediction
 				rain.push observation.rainfall.rainfall_amount
 			end
 		end
-		puts "#{temperature}"
 		# Ensure there is enough data
 		if count == 0
 			next
@@ -71,7 +68,7 @@ def make_prediction
 
 		# Extrapolate
 		x = count
-		while x <= (count + PREDICTIONS)
+		while x < (count + amount)
 			# Regress the temperature
 			regression.regress time, temperature
 	    	temperature_variance = regression.r_2
@@ -100,6 +97,7 @@ def make_prediction
 			prediction.temperature = Temperature.create(current_temperature: predicted_temperature)
 			prediction.wind = Wind.create(wind_speed: predicted_wind_speed, wind_direction: predicted_wind_direction)
 	    	prediction.rainfall = Rainfall.create(rainfall_amount: predicted_rain)
+	    	puts "Making a prediction for '#{weather_station.name}': Temperature: #{predicted_temperature}, Wind Speed: #{predicted_wind_speed}, Wind Direction: #{predicted_wind_direction}, Predicted Rain: #{predicted_rain}"
 			prediction.save
 			x+=1
 		end

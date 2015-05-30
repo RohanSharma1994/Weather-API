@@ -1,11 +1,13 @@
-To run the following application, run the following commands in order:
-1. rake db:drop
-2. rake db:create
-3. rake db:migrate
-4. rake db:seed
-5. whenever -i
-6. Restart your computer. (THIS IS IMPORTANT AS WE HAVE A CRONJOB WHICH RUNS ON @RESTART). This will initialize our application (WITH 18 predictions which are the same as the current observation).
-7. rails s  (May need to wait a few hours for predictions to get more accurate. The way they are calculated is explained below)
+=WeatherAPI
+== Compilation Instructions
+# To run the following application, run the following commands in order:
+# 1. rake db:drop
+# 2. rake db:create
+# 3. rake db:migrate
+# 4. rake db:seed
+# 5. whenever -i
+# 6. Restart your computer. (THIS IS IMPORTANT AS WE HAVE A CRONJOB WHICH RUNS ON @RESTART). This will initialize our application (WITH 18 predictions which are the same as the current observation).
+# 7. rails s  (May need to wait a few hours for predictions to get more accurate. The way they are calculated is explained below)
 
 
 
@@ -14,12 +16,14 @@ Predictions system:
 The prediction system works differently depending on how much data is available in our database.
 It behaves in one of these ways:
 1. If there is at-least 4 (Ideally 7) previous days of data from today:
-Then suppose we want to make a prediction for 4:15pm Then we look at how the weather was for these past 4-7 days around approximately 4.00pm-4.30pm. We regress on this data set and predict what the weather will be for today 4.15pm
+Then suppose we want to make a prediction for 4:15pm. Then we look at how the weather was for a particular weather station for these past 4-7 days around approximately 4.00pm-4.30pm. We regress on this data set and predict what the weather will be for today 4.15pm
 
 2. If there is not at-least 4 previous days of data available:
-Then we only regress on today's observations and predictions.
+Then we only regress on today's observations and predictions to improve accuracy.
 
 Our application initializes with today's current observations and based on this assumes the next 3 hours will be the same as this observation. From then on, every 10 minutes it makes only one prediction 3 hours in the future, since every 10 minutes the user may ask for a prediction 3 hours in the future. We have taken this approach to decrease server load, and handle requests efficiently. 
+
+To make this prediction we would regress over a data points through the week (in case 1) or through the day (in case 2).
 
 When testing our application, it will be ideal if you wait a few hours after initializing it (however this is not required to test the json and web views). This will ensure predictions have got enough data to regress on for today. 
 
@@ -27,3 +31,6 @@ To make our predictions we use the following method:
 
 1. If a post code prediction is asked for: Then we make a call to a postcode API, get the latitude and longitude of the post code and pass this longitude to a function described below.
 2. If a latitude longitude prediction is asked for: We rank all the stations based on their distance from the latitude and longitude. We calculate this distance based on the Harversine formula. If the closest station is less than 5km away, we just use its's predictions. If it isn't then we pick the 3 closest weather stations and aggregate the predictions for each weather station.
+
+
+File Structure

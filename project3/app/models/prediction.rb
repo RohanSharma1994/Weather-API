@@ -17,6 +17,7 @@ PREDICTION_NORMALIZER = 18.0
 # a 5km radius of our location, we will
 # not use the Triangle method.
 LIMIT = 5.0
+MAX_PERIOD = 180
 
 # The prediction retrieval system
 class Prediction < ActiveRecord::Base
@@ -100,12 +101,16 @@ class Prediction < ActiveRecord::Base
 		# Get all the weather stations
 		weather_stations = WeatherStation.all
 		array = []
+		# Ensure the user hasn't given a period larger than 180
+		period = [period.abs, MAX_PERIOD].min
 
 		# For each of these weather stations calculate the distance from the lat and lon
 		for weather_station in weather_stations
 			distance = distance lat, lon, weather_station.lat, weather_station.lon
-			# Store this distance in an array of hash maps
-			array.push({"weather_station" => weather_station, "distance" => distance})
+			# Store this distance in an array of hash maps only if it has enough predictions
+			if weather_station.predictions.length >= (period/ONE_PERIOD+1)
+				array.push({"weather_station" => weather_station, "distance" => distance})
+			end
 		end
 
 		# Sort the array based on distances 
@@ -119,6 +124,7 @@ class Prediction < ActiveRecord::Base
 			# Get the latest predictions from the database for this weather station
 			# The first prediction will represent the current conditions
 			array[i]["predictions"] = weather_station.predictions.limit(period/ONE_PERIOD + 1).order('created_at desc')
+			array[i]["predictions"] = array[i]["predictions"].reverse
 		end
 
 		# The final hash to respond with

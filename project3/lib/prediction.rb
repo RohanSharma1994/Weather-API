@@ -3,6 +3,8 @@
 require_relative 'regression.rb'
 WEEK = 7
 LIMIT = 4
+THREE_HOURS = 18
+ANGLE = 360
 
 # Amount of predictions to make
 def make_prediction amount
@@ -39,7 +41,7 @@ def make_prediction amount
 				# Add each of the specific observations
 				temperature.push observation.temperature.current_temperature
 				wind_speed.push observation.wind.wind_speed
-				wind_direction.push observation.wind.wind_direction
+				wind_direction.push observation.wind.wind_direction%ANGLE
 				rain.push observation.rainfall.rainfall_amount
 			end
 		else
@@ -54,7 +56,7 @@ def make_prediction amount
 				# Add each of the specific observations
 				temperature.push observation.temperature.current_temperature
 				wind_speed.push observation.wind.wind_speed
-				wind_direction.push observation.wind.wind_direction
+				wind_direction.push observation.wind.wind_direction%ANGLE
 				rain.push observation.rainfall.rainfall_amount
 			end
 		end
@@ -68,6 +70,17 @@ def make_prediction amount
 
 		# Extrapolate
 		x = count
+		# In this case only one prediction needs to be made 3 hours in the future
+		if amount == 1 and weather_station.predictions.count == THREE_HOURS
+			for prediction in weather_station.predictions
+				temperature.push prediction.temp
+				wind_speed.push prediction.wind_spd
+				wind_direction.push prediction.wind_dir%ANGLE
+				rain.push prediction.rain
+				time.push count
+				count += 1
+			end
+		end
 		while x < (count + amount)
 			# Regress the temperature
 			regression.regress time, temperature
@@ -95,9 +108,9 @@ def make_prediction amount
 		   		rain_variance: rain_variance
 			)
 			prediction.temperature = Temperature.create(current_temperature: predicted_temperature)
-			prediction.wind = Wind.create(wind_speed: predicted_wind_speed, wind_direction: predicted_wind_direction)
+			prediction.wind = Wind.create(wind_speed: predicted_wind_speed, wind_direction: predicted_wind_direction%ANGLE)
 	    	prediction.rainfall = Rainfall.create(rainfall_amount: predicted_rain)
-	    	puts "Making a prediction for '#{weather_station.name}': Temperature: #{predicted_temperature}, Wind Speed: #{predicted_wind_speed}, Wind Direction: #{predicted_wind_direction}, Predicted Rain: #{predicted_rain}"
+	    	puts "Making a prediction for '#{weather_station.name}': Temperature: #{predicted_temperature}, Wind Speed: #{predicted_wind_speed}, Wind Direction: #{predicted_wind_direction%ANGLE}, Predicted Rain: #{predicted_rain}"
 			prediction.save
 			x+=1
 		end

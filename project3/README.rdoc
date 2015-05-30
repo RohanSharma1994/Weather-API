@@ -16,8 +16,7 @@ To run the following application, run the following commands in order:
 The prediction system works differently depending on how much data is available in our database.
 ====It behaves in one of these ways:
 1. If there is at-least 4 (Ideally 7) previous days of data from today:
-Then suppose we want to make a prediction for 4:15pm. Then we look at how the weather was for a particular weather station for these past 4-7 days around approximately 4.00pm-4.30pm. We regress on this data set and predict what the weather will be for today 4.15pm
-
+Then suppose we want to make a prediction for 4:15pm. Then we look at how the weather was for a particular weather station for these past 4-7 days around approximately 4.00pm-4.30pm. We regress on this data set and predict what the weather will be for today 4.15pm.
 2. If there is not at-least 4 previous days of data available:
 Then we only regress on today's observations and predictions to improve accuracy.
 
@@ -33,4 +32,31 @@ To make this prediction we would regress over a data points through the week (in
 2. If a latitude longitude prediction is asked for: We rank all the stations based on their distance from the latitude and longitude. We calculate this distance based on the Harversine formula. If the closest station is less than 5km away, we just use its's predictions. If it isn't then we pick the 3 closest weather stations and aggregate the predictions for each weather station.
 
 
-== File Structure
+== File Structure (Important files/folders only)
+==== /lib/initialize.rb
+This file initializes our application. It fetches the latest data from BOM and sets every prediction for the next 3 hours to this data. This makes sense as the system will predict based on what it already knows. If all it knows is one data point, it will make predictions based on that one data point.
+==== /lib/load_bom.rb
+Our background retrieval script. Scrapes data from BOM.
+==== /lib/persist_functions.rb
+Used by load_bom.rb to save observations to database.
+==== /lib/prediction.rb
+Makes a prediction for each weather station and stores it in the database. 
+==== /lib/regression.rb
+The regression class we use to predict weather.
+==== /lib/update.rb
+This file is called in 10 minute intervals. It basically fetches the latest data from BOM and makes 1 prediction 3 hours into the future.
+
+==== /log/cron_log.log
+Logs every prediction, data scrape made by our application.
+
+==== /db
+Contains our migrations e.t.c.
+
+==== /config/schedule.rb
+This file details the tasks we automate in the background.
+
+==== /config/routes.rb
+The routes for our application.
+
+==== /app/
+Contains our models, views and controllers.

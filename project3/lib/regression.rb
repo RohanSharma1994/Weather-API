@@ -1,6 +1,7 @@
 # Regression class
 require 'matrix'
 ZERO = 0.01
+N=0.95
 # A Regression class which performs many different regressions
 # and decides on the best one out of {linear, polynomial, exponential,
 # logarithmic}
@@ -152,6 +153,11 @@ class Regression
 		return (1-sse/sst)
 	end
 
+	# Scale the input variable appropriately
+	def normalize n
+		n-N
+	end
+
 	# This function can be called by the client to get the best type of regression
 	def regress x_array, y_array
 		# Reset
@@ -175,6 +181,7 @@ class Regression
 
 	# This function can be called by the client to get an extrapolation
 	def extrapolate n
+		n = normalize n
 		if @type == :none
 			return
 		elsif @type == :polynomial

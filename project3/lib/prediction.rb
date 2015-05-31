@@ -5,6 +5,7 @@ WEEK = 7
 LIMIT = 4
 THREE_HOURS = 18
 ANGLE = 360
+DAY_LIMIT = 18
 
 # Amount of predictions to make
 def make_prediction amount
@@ -33,8 +34,8 @@ def make_prediction amount
 		# If there is less than 4 days of data just regress on today's data
 		# to ensure more accuracy.
 		if(days.length <= LIMIT) 
-			day = weather_station.days.find_by(date:Date.today)
-			for observation in day.observations
+			observations = weather_station.days.find_by(date:Date.today).observations.last(DAY_LIMIT)
+			for observation in observations
 				# Add to the time array
 				time.push count
 				count += 1

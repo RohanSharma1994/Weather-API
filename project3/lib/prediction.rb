@@ -70,17 +70,7 @@ def make_prediction amount
 
 		# Extrapolate
 		x = count
-		# In this case only one prediction needs to be made 3 hours in the future
-		if amount == 1 and weather_station.predictions.count == THREE_HOURS
-			for prediction in weather_station.predictions
-				temperature.push prediction.temp
-				wind_speed.push prediction.wind_spd
-				wind_direction.push prediction.wind_dir%ANGLE
-				rain.push prediction.rain
-				time.push count
-				count += 1
-			end
-		end
+
 		while x < (count + amount)
 			# Regress the temperature
 			regression.regress time, temperature

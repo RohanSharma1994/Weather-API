@@ -6,8 +6,10 @@ To run the following application, run the following commands in order:
 3. rake db:migrate
 4. rake db:seed
 5. whenever -i
-6. Restart your computer. (THIS IS IMPORTANT AS WE HAVE A CRONJOB WHICH RUNS ON @RESTART). This will initialize our application (WITH 18 predictions which are the same as the current observation).
-7. rails s  (May need to wait a few hours for predictions to get more accurate. The way they are calculated is explained below)
+6. rails c
+7. load 'lib/initialize.rb'
+8. Once this initialization script has finished running, our application will be initialized. All the web and json views will be operational. The current data for each weather station will be initialized, and the next 3 hours of predictions will be set to the current observation as that is all the application knows. From then on every 10 minutes, one prediction will be made 3 hours into the future (As that prediction made will get old 10 minutes later). It would be ideal to leave our application running for a while so some actual predictions can be made.
+9. Type 'exit' to get out of rails console. Then type 'rails s' to start rails server.
 
 
 
